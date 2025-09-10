@@ -1,20 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Rink Display</title>
-  <meta http-equiv="refresh" content="300"> <!-- reload page every 300s -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    html, body { height:100%; margin:0; padding:0; overflow:hidden; background:#000; }
+    html, body { height:100%; margin:0; padding:0; background:#000; overflow:hidden; }
     iframe { width:100%; height:100%; border:0; }
   </style>
 </head>
 <body>
   <iframe
-    src="https://docs.google.com/presentation/d/e/2PACX-1vQbETN8KgfeloXRQGzGt9E7eeW0qDRen7mkhG-I85hgJ941eFQzwIZRaozE38dhODMXJj-ml1qfFCcU/embed?start=true&loop=true&delayms=5000"
+    id="deck"
+    src="about:blank"
     allowfullscreen
     referrerpolicy="no-referrer">
   </iframe>
+
+  <script>
+    // === EDIT ONLY THESE TWO SETTINGS ===
+    const SLIDES_URL = "https://docs.google.com/presentation/d/e/2PACX-1vQbETN8KgfeloXRQGzGt9E7eeW0qDRen7mkhG-I85hgJ941eFQzwIZRaozE38dhODMXJj-ml1qfFCcU/embed?start=true&loop=true&delayms=5000";
+    const REFRESH_MS = 60 * 1000; // reload every 60 seconds (change if you want)
+
+    const frame = document.getElementById("deck");
+
+    function loadFresh() {
+      // Add a cache-busting query so Firestick/Silk fetches a truly fresh copy
+      const sep = SLIDES_URL.includes("?") ? "&" : "?";
+      frame.src = SLIDES_URL + sep + "cb=" + Date.now();
+    }
+
+    // Initial load
+    loadFresh();
+
+    // Keep it fresh on a timer
+    setInterval(loadFresh, REFRESH_MS);
+
+    // Also refresh when the page regains focus (e.g., device wakes)
+    window.addEventListener("focus", loadFresh);
+  </script>
 </body>
 </html>
+
